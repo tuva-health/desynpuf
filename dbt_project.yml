@@ -4,9 +4,15 @@ config-version: 2
 
 profile: 'desynpuf'
 
-# These configurations specify where dbt should look for different types of files.
-# The `source-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
+vars:
+    desynpuf_database: desynpuf                  # configuration required
+    desynpuf_schema: public                      # configuration required
+    beneficiary_summary: "{{ source('desynpuf','beneficiary_summary') }}"
+    inpatient_claims: "{{ source('desynpuf','inpatient_claims') }}"
+    outpatient_claims: "{{ source('desynpuf','outpatient_claims') }}"
+    carrier_claims: "{{ source('desynpuf','carrier_claims') }}"
+    prescription_drug_events: "{{ source('desynpuf','prescription_drug_events') }}"
+
 source-paths: ["models"]
 analysis-paths: ["analysis"]
 test-paths: ["tests"]

@@ -1,11 +1,10 @@
-
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 with elig_months as (
 select
     desynpuf_id
 ,   sum(bene_hi_cvrage_tot_mons) as tot
-from desynpuf.public.beneficiary_summary
+from {{ ref('src_beneficiary_summary') }}
 group by 1
 )
 

@@ -1,5 +1,4 @@
-
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 select
     clm_id as encounter_id
@@ -14,7 +13,7 @@ select
 ,   prvdr_num as facility_npi
 ,   clm_drg_cd as drg
 ,   clm_pmt_amt as paid_amount
-from inpatient_claims
+from {{ ref('src_inpatient_claims') }}
 where segment = 1
 
 union
@@ -22,8 +21,8 @@ union
 select
     clm_id as encounter_id
 ,   desynpuf_id as patient_id
-,   clm_admsn_dt as encounter_start_date
-,   nch_bene_dschrg_dt as encounter_end_date
+,   clm_from_dt as encounter_start_date
+,   clm_thru_dt as encounter_end_date
 ,   'Outpatient' as encounter_type
 ,   null as admit_type_code
 ,   null as admit_source_code
@@ -32,7 +31,7 @@ select
 ,   prvdr_num as facility_npi
 ,   null as drg
 ,   clm_pmt_amt as paid_amount
-from inpatient_claims
+from {{ ref('src_outpatient_claims') }}
 where segment = 1
 
 union
@@ -50,4 +49,4 @@ select
 ,   null as facility_npi
 ,   null as drg
 ,   line_nch_pmt_amt_1 as paid_amount
-from carrier_claims
+from {{ ref('src_carrier_claims') }}

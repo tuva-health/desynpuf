@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: desynpuf
+    schema: "{{ var('desynpuf_schema') }}"
+    database: "{{ var('desynpuf_database') }}"
+    tables:
+      - name: beneficiary_summary
+        description: "Table containing coverage information about patients (one record per eligibility span)."
+      - name: inpatient_claims
+        description: "Inpatient claims data including dates of admission/discharge, diagnoses, and procedures."
+      - name: outpatient_claims
+        description: "Outpatient claims data including claim dates, diagnoses, and procedures."
+      - name: carrier_claims
+        description: "Carrier claims data including claim dates, diagnoses, and procedures."
+      - name: prescription_drug_events
+        description: "Prescription claims data including claim dates, NDC, quantity, and days supply."

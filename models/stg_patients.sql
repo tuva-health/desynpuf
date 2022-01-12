@@ -1,5 +1,4 @@
-
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 select distinct
     desynpuf_id as patient_id
@@ -15,10 +14,10 @@ select distinct
         when bene_race_cd = 5 then 'Hispanic'
         else 'Unknown'
     end race_code
-,   to_date(bene_birth_dt,'YYYYMMDD') as birth_date
-,   to_date(bene_death_dt,'YYYYMMDD') as death_date
+,   bene_birth_dt as birth_date
+,   bene_death_dt as death_date
 ,   null as address
 ,   null as city
 ,   null as state
 ,   null as zip_code
-from desynpuf.public.beneficiary_summary
+from {{ ref('src_beneficiary_summary') }}
