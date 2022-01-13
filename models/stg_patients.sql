@@ -1,5 +1,6 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
+with patients_temp as (
 select distinct
     desynpuf_id as patient_id
 ,   case
@@ -21,3 +22,65 @@ select distinct
 ,   null as state
 ,   null as zip_code
 from {{ ref('src_beneficiary_summary') }}
+)
+
+, patients_no_death as (
+select distinct 
+    patient_id
+,   gender_code
+,   race_code
+,   birth_date
+,   death_date
+,   address
+,   city
+,   state
+,   zip_code
+from patients_temp
+where death_date is null
+)
+
+, patients_yes_death as (
+select distinct 
+    patient_id
+,   gender_code
+,   race_code
+,   birth_date
+,   death_date
+,   address
+,   city
+,   state
+,   zip_code
+from patients_temp
+where death_date is not null
+)
+
+select
+    a.patient_id
+,   a.gender_code
+,   a.race_code
+,   a.birth_date
+,   b.death_date
+,   a.address
+,   a.city
+,   a.state
+,   a.zip_code
+from patients_no_death a
+left join patients_yes_death b
+    on a.patient_id = b.patient_id
+    
+union all
+
+select 
+    a.patient_id
+,   a.gender_code
+,   a.race_code
+,   a.birth_date
+,   a.death_date
+,   a.address
+,   a.city
+,   a.state
+,   a.zip_code
+from patients_yes_death a
+left join patients_no_death b
+    on a.patient_id = b.patient_id
+where b.patient_id is null
