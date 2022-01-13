@@ -6,7 +6,7 @@ profile: 'desynpuf'
 
 vars:
     desynpuf_database: desynpuf                  # configuration required
-    desynpuf_schema: public                      # configuration required
+    desynpuf_schema: source                      # configuration required
     beneficiary_summary: "{{ source('desynpuf','beneficiary_summary') }}"
     inpatient_claims: "{{ source('desynpuf','inpatient_claims') }}"
     outpatient_claims: "{{ source('desynpuf','outpatient_claims') }}"
@@ -24,3 +24,11 @@ target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_modules"
+
+models:
+  desynpuf:
+    +schema: staging
+
+seeds:
+  desynpuf:
+    +schema: vocabulary
