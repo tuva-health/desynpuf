@@ -1,2 +1,5 @@
 packages:
   - local: /Users/aaronneiderhiser/dev/tuva
+
+packages:
+  - git: "https://github.com/dbt-labs/dbt-utils.git" # git URL
