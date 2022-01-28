@@ -7,14 +7,14 @@ select distinct
         when bene_sex_ident_cd = 1 then 'Male'
         when bene_sex_ident_cd = 2 then 'Female'
         else 'Unknown'
-    end gender_code
+    end gender
 ,   case
         when bene_race_cd = 1 then 'White'
         when bene_race_cd = 2 then 'Black'
         when bene_race_cd = 3 then 'Others'
         when bene_race_cd = 5 then 'Hispanic'
         else 'Unknown'
-    end race_code
+    end race
 ,   bene_birth_dt as birth_date
 ,   bene_death_dt as death_date
 ,   null as address
@@ -27,8 +27,8 @@ from {{ ref('src_beneficiary_summary') }}
 , patients_no_death as (
 select distinct 
     patient_id
-,   gender_code
-,   race_code
+,   gender
+,   race
 ,   birth_date
 ,   death_date
 ,   address
@@ -42,8 +42,8 @@ where death_date is null
 , patients_yes_death as (
 select distinct 
     patient_id
-,   gender_code
-,   race_code
+,   gender
+,   race
 ,   birth_date
 ,   death_date
 ,   address
@@ -56,8 +56,8 @@ where death_date is not null
 
 select
     a.patient_id
-,   a.gender_code
-,   a.race_code
+,   a.gender
+,   a.race
 ,   a.birth_date
 ,   b.death_date
 ,   a.address
@@ -72,8 +72,8 @@ union all
 
 select 
     a.patient_id
-,   a.gender_code
-,   a.race_code
+,   a.gender
+,   a.race
 ,   a.birth_date
 ,   a.death_date
 ,   a.address

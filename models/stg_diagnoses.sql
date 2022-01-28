@@ -2,7 +2,7 @@
 
 select
     encounter_id
-,   'ICD-10-CM' as diagnosis_code_type
+,   'ICD-10-CM' as code_type
 ,   icd10cm as diagnosis_code
 ,   diagnosis_rank
 ,   null as present_on_admission_code   
